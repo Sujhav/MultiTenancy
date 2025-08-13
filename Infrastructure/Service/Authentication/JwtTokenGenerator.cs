@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +27,6 @@ namespace Infrastructure.Service.Authentication
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.Secret));
             var SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var data = users.Id.Value.ToString();
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub,users.Id.Value.ToString()!),
@@ -43,6 +43,11 @@ namespace Infrastructure.Service.Authentication
                 signingCredentials: SigningCredentials
                 );
             return new JwtSecurityTokenHandler().WriteToken(SecurityToken);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
     }
 }

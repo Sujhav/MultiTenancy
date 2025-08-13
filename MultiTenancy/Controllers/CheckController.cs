@@ -17,6 +17,14 @@ namespace MultiTenancy.Controllers
         {
             _authorizationService = authorizationService;
         }
+
+        [HttpGet("/valid")]
+        [Authorize]
+        public async Task<IActionResult> CheckValidaty()
+        {
+            return Ok("haha you are valied");
+        }
+
         [HttpGet("/index")]
         //[Authorize(Roles = "Admin")]
         [Authorize(Policy = "RequireAdmin")]

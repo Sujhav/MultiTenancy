@@ -37,6 +37,8 @@ namespace Infrastructure
             );
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<ILoginWithRefreshTokenRepository, LoginWithRefreshTokenRepository>();
             return services;
         }
 

@@ -63,6 +63,23 @@ namespace Infrastructure.Persistance.Configuration
             });
 
 
+            builder.OwnsMany(rt => rt.RefreshTokens, rft =>
+            {
+                rft.HasKey(s => s.Id);
+                rft.WithOwner().HasForeignKey(rt => rt.UserId);
+                rft.Property(s => s.Id).HasConversion(u => u.Value, value => RefreshTokenId.CreateNew(value));
+                rft.Property(s => s.Token).HasMaxLength(200);
+                rft.HasIndex(s => s.Token).IsUnique();
+                rft.Property(s => s.UserId).HasConversion(id => id.Value, value => UserId.Create(value));
+            });
+
+            builder.Metadata.FindNavigation(nameof(Users.RefreshTokens))!
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            //builder.Navigation(s => s.RefreshTokens).UsePropertyAccessMode(PropertyAccessMode.Field).HasField("_refreshToken");
+
+
+
         }
     }
 }

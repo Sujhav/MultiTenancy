@@ -1,5 +1,6 @@
 ﻿using Application.Authentication.Command.Register;
 using Application.Authentication.Query.Login;
+using Application.Authentication.Query.RefreshToken;
 using Application.Common.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +38,14 @@ namespace MultiTenancy.Controllers
 
             var result = await _mediatr.Send(command);
             return Ok(result);
+        }
+
+        [HttpGet("/refreshToken")]
+        public async Task<IActionResult> RefreshToken(string RefreshToken)
+        {
+            var command = new RefreshTokenQuery(RefreshToken);
+            var response = await _mediatr.Send(command);
+            return Ok(response);
         }
 
     }

@@ -11,7 +11,8 @@ namespace Application.Common.Interfaces.Persistance
 {
     public interface IUserRepository
     {
-        Task<Users?> GetUsersByEmail(Email Email);
-        Task Add(Users users);
+        Task<Domain.Users.Users?> GetUsersByEmail(Email Email);
+        Task Add(Domain.Users.Users? users);
+        Task<List<UsersDto>> GetAllUsers();
     }
 }

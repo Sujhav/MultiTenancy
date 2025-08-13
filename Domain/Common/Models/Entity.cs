@@ -10,6 +10,11 @@ namespace Domain.Common.Models
     {
         public TId Id { get; protected set; }
 
+        protected Entity(TId id)
+        {
+            Id = id;
+        }
+
         public override bool Equals(object? obj)
         {
             return obj is Entity<TId> entity && Id.Equals(entity.Id);

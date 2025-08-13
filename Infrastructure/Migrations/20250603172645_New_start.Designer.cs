@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MultiTenencyDbContext))]
-    [Migration("20250424175507_New_Migration")]
-    partial class New_Migration
+    [Migration("20250603172645_New_start")]
+    partial class New_start
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,6 +179,35 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Users.Users", b =>
                 {
+                    b.OwnsMany("Domain.Users.Entities.RefreshToken", "RefreshTokens", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("ExpiresOnUtc")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Token")
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)");
+
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("Token")
+                                .IsUnique()
+                                .HasFilter("[Token] IS NOT NULL");
+
+                            b1.HasIndex("UserId");
+
+                            b1.ToTable("RefreshToken");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.OwnsOne("Domain.Users.ValuesObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UsersId")
@@ -252,6 +281,8 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("PhoneNumber")
                         .IsRequired();
+
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("Domain.Entities.Roles", b =>

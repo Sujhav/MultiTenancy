@@ -20,7 +20,7 @@ namespace Infrastructure.Persistance.Repository
         }
         public async Task Add(Users users)
         {
-            await _context.AddAsync(users);
+            await _context.Users.AddAsync(users);
             await _context.SaveChangesAsync();
         }
 
@@ -45,6 +45,14 @@ namespace Infrastructure.Persistance.Repository
 
 
 
+        }
+
+        public async Task<List<UsersDto>> GetAllUsers()
+        {
+            var data = await _context.Users.Select(s => new UsersDto
+            (s.FirstName, s.LastName, s.Email.Value, null, new AddressDto(s.Address.District, s.Address.City), s.PhoneNumber.Value
+            )).ToListAsync();
+            return data;
         }
 
 

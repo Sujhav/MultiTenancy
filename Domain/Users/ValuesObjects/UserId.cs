@@ -37,7 +37,7 @@ namespace Domain.Users.ValuesObjects
             yield return Value;
         }
 
-        private UserId()
+        private UserId() 
         {
 
         }
